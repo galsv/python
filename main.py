@@ -27,6 +27,8 @@ dp = Dispatcher(bot)
 # Включаем логирование, чтобы не пропустить важные сообщения
 logging.basicConfig(level=logging.INFO)
 
+buttons_city = [["Москва", "Нижний Новгород"], ["Сочи", "Владивосток"]]
+
 
 def get_weather(city):
     observation = mgr.weather_at_place(city)
@@ -37,19 +39,15 @@ def get_weather(city):
 @dp.message_handler(commands="weather")
 async def cmd_start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    buttons = ["Москва", "Нижний Новгород"]
-    keyboard.add(*buttons)
+    for i in range(len(buttons_city)):
+        keyboard.add(*buttons_city[i])
     await message.answer("Погода в каком городе вас интересует?", reply_markup=keyboard)
 
 
-@dp.message_handler(lambda message: message.text == "Москва")
+@dp.message_handler(lambda message: message.text in [element for a_list in buttons_city for element in a_list])
 async def without_puree(message: types.Message):
-    await message.reply(get_weather("Москва"), reply_markup=types.ReplyKeyboardRemove())
-
-
-@dp.message_handler(lambda message: message.text == "Нижний Новгород")
-async def without_puree(message: types.Message):
-    await message.reply(get_weather("Нижний Новгород"), reply_markup=types.ReplyKeyboardRemove())
+    print(message)
+    await message.reply(get_weather(message["text"]), reply_markup=types.ReplyKeyboardRemove())
 
 
 if __name__ == "__main__":
