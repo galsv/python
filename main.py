@@ -31,7 +31,7 @@ logging.basicConfig(level=logging.INFO)
 def get_weather(city):
     observation = mgr.weather_at_place(city)
     w = observation.weather
-    return f"В городе <u>{city}</u> сейчас  {w.detailed_status}, а температу вохдуха <b>{round(w.temperature('celsius')['temp'])}</b>\xb0"
+    return f"В городе <u>{city}</u> сейчас {w.detailed_status}, а температу вохдуха <b>{round(w.temperature('celsius')['temp'])}</b>\xb0"
 
 
 @dp.message_handler(commands="weather")
@@ -39,7 +39,7 @@ async def cmd_start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     buttons = ["Москва", "Нижний Новгород"]
     keyboard.add(*buttons)
-    await message.answer("Погоду в каком городе вас интересует?", reply_markup=keyboard)
+    await message.answer("Погода в каком городе вас интересует?", reply_markup=keyboard)
 
 
 @dp.message_handler(lambda message: message.text == "Москва")
